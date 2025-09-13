@@ -1,4 +1,6 @@
-const API_KEY = `4083262a624f4cdaaedb9b397344b994`;
+// const API_KEY = `4083262a624f4cdaaedb9b397344b994`;
+const API_KEY = ``;
+const PAGE_SIZE = 20;
 let newsList = [];
 let searchInput = document.getElementById('search-input');
 let moreBtn = document.getElementById('more-btn');
@@ -19,7 +21,7 @@ moreBtn.addEventListener('click', () => {
 const getLatestNews = async () => {
   const url = new URL(
     // `https://newsapi.org/v2/top-headlines?country=us&apiKey=${API_KEY}`
-    `https://study-website-be-bbb1539aa813.herokuapp.com`
+    `https://noona-times-be-5ca9402f90d9.herokuapp.com/top-headlines?country=kr&pageSize=${PAGE_SIZE}`
   );
   const response = await fetch(url);
   const data = await response.json();
@@ -30,26 +32,32 @@ const getLatestNews = async () => {
 
 const render = () => {
   const newsHTML = newsList
-    .map(
-      (news) => `<div class="row news">
+    .map((news) => {
+      let description = news.description ? news.description : '내용없음';
+      if (description && description.length > 200) {
+        description = description.slice(0, 200) + '...';
+      }
+      const imageUrl = news.urlToImage || '/images/no-img.png';
+      const sourceName = news.source.name ? news.source.name : 'no-source';
+      const publishedDate = moment(news.publishedAt).startOf('day').fromNow();
+
+      return `<div class="row news">
           <div class="col-lg-4">
             <img
               class="news-img-size"
-              src=${news.urlToImage}
-              alt=""
+              src=${imageUrl}
             />
           </div>
           <div class="col-lg-8">
             <h2>${news.title}</h2>
             <p>
-              ${news.description}
+              ${description}
             </p>
-            <div>${news.source.name}*${news.publishedAt}</div>
+            <div>${sourceName} * ${publishedDate}</div>
           </div>
-        </div>`
-    )
+        </div>`;
+    })
     .join('');
-
   document.getElementById('news-board').innerHTML = newsHTML;
 };
 
