@@ -5,6 +5,7 @@ let newsList = [];
 let searchInput = document.getElementById('search-input');
 let moreBtn = document.getElementById('more-btn');
 let menus = document.getElementById('menus');
+const menusBtn = document.querySelectorAll('.menus button');
 let searchBtn = document.getElementById('search-btn');
 let submitBtn = document.getElementById('search-submit');
 
@@ -18,6 +19,10 @@ moreBtn.addEventListener('click', () => {
   menus.classList.toggle('active');
 });
 
+menusBtn.forEach((menu) =>
+  menu.addEventListener('click', (event) => getNewsByCategory(event))
+);
+
 const getLatestNews = async () => {
   const url = new URL(
     // `https://newsapi.org/v2/top-headlines?country=us&apiKey=${API_KEY}`
@@ -28,6 +33,30 @@ const getLatestNews = async () => {
   newsList = data.articles;
   render();
   console.log(newsList);
+};
+
+const getNewsByCategory = async (event) => {
+  const category = event.target.textContent.toLowerCase();
+  const url = new URL(
+    // `https://newsapi.org/v2/top-headlines?country=us&category=${category}&apiKey=${API_KEY}`
+    `https://noona-times-be-5ca9402f90d9.herokuapp.com/top-headlines?country=kr&category=${category}&pageSize=${PAGE_SIZE}`
+  );
+  const response = await fetch(url);
+  const data = await response.json();
+  newsList = data.articles;
+  render();
+};
+
+const handleSearch = async () => {
+  const keyword = document.getElementById('search-input').value;
+  const url = new URL(
+    // `https://newsapi.org/v2/top-headlines?country=us&q=${keyword}&apiKey=${API_KEY}`
+    `https://noona-times-be-5ca9402f90d9.herokuapp.com/top-headlines?country=kr&q=${keyword}&pageSize=${PAGE_SIZE}`
+  );
+  const response = await fetch(url);
+  const data = await response.json();
+  newsList = data.articles;
+  render();
 };
 
 const render = () => {
