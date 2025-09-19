@@ -88,6 +88,37 @@ input[type='submit'] {
   object-fit: fill;
 }
 
+.pagination {
+  padding: 20px 10px;
+  justify-content: center;
+}
+
+.page-link {
+  position: relative;
+  display: block;
+  color: #000000 !important;
+  text-decoration: none;
+  background-color: #fff;
+  border: 1px solid #000000 !important;
+}
+
+.page-link:hover {
+  z-index: 2;
+  color: #fff !important;
+  background-color: #000000;
+}
+
+.page-link:focus {
+  z-index: 3;
+  outline: 0;
+  box-shadow: none;
+}
+
+.page-item.active .page-link {
+  color: #fff !important;
+  background-color: #000000;
+}
+
 @media screen and (max-width: 480px) {
   .menus {
     position: fixed;
